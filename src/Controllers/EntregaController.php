@@ -95,7 +95,8 @@ class EntregaController
         if (!$rows) {
            json(['erro' => 'Transportadora não encontrada'], 404);
         }
-
+    
+        //Validando se a transportadora está ativa
         $inativo = $rows['deleted_at'];
         if ($inativo) {
            json(['erro' => 'Não é possível registrar uma entrega em uma transportadora inativada'], 422);
@@ -288,5 +289,5 @@ class EntregaController
                 'data'      => $o['created_at'],
             ], $ocorrencias),
         ];
-    }
-}
+  }
+ }
