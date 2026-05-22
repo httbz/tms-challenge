@@ -88,7 +88,7 @@ Exemplo:
 ```env
 DB_HOST=mysql
 DB_PORT=3306
-DB_NAME=brudam_test
+DB_NAME=db_test
 DB_USER=app
 DB_PASS=app
 ```
