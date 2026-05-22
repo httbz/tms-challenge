@@ -1,6 +1,6 @@
 # TMS Challenge
 
-API REST desenvolvida em PHP para gerenciamento de entregas, transportadoras e não conformidades.
+API REST desenvolvida em PHP e Laravel para gerenciamento de entregas, transportadoras e não conformidades.
 
 ---
 
