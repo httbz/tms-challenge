@@ -89,12 +89,18 @@ class EntregaController
             }
         }
 
-        $stmt = $db->prepare('SELECT id FROM transportadoras WHERE id = ?');
+        $stmt = $db->prepare('SELECT id, deleted_at FROM transportadoras WHERE id = ?');
         $stmt->execute([$data['id_transportadora']]);
-        if (!$stmt->fetch()) {
-            json(['erro' => 'Transportadora não encontrada'], 404);
+        $rows = $stmt->fetch();
+        if (!$rows) {
+           json(['erro' => 'Transportadora não encontrada'], 404);
         }
 
+        $inativo = $rows['deleted_at'];
+        if ($inativo) {
+           json(['erro' => 'Não é possível registrar uma entrega em uma transportadora inativada'], 422);
+        }
+    
         $stmt = $db->prepare('SELECT id FROM remetentes WHERE id = ?');
         $stmt->execute([$data['id_remetente']]);
         if (!$stmt->fetch()) {
