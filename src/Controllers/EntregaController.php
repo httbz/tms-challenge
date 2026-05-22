@@ -95,7 +95,8 @@ class EntregaController
         if (!$rows) {
            json(['erro' => 'Transportadora não encontrada'], 404);
         }
-
+    
+        //Validando se a transportadora está ativa
         $inativo = $rows['deleted_at'];
         if ($inativo) {
            json(['erro' => 'Não é possível registrar uma entrega em uma transportadora inativada'], 422);
@@ -288,5 +289,54 @@ class EntregaController
                 'data'      => $o['created_at'],
             ], $ocorrencias),
         ];
+  }
+  public static function storeNaoConf(array $params): void
+  {
+    $data = body();
+    $db = Database::connection();
+
+    //Realizando validações antes de inserir os dados
+    foreach (['id_motivo'] as $campo) {
+      if (empty($data[$campo])) {
+          json(['erro' => "Campo obrigatório: {$campo}"], 422);
+      }
     }
+
+    $stmt = $db->prepare('SELECT id, ativo FROM motivos_nao_conformidade WHERE id = ?');
+    $stmt->execute([$data['id_motivo']]);
+    $rows = $stmt->fetch();
+    if (!$rows) {
+        json(['erro' => 'Motivo de não conformidade não encontrado'], 404);
+    }
+
+    $ativo = $rows['ativo'];
+    if (!$ativo) {
+        json(['erro' => 'Não é possível registrar uma não conformidade com um motivo inativo'], 422);
+    }
+
+    $stmt = $db->prepare('SELECT id FROM entregas WHERE id = ?');
+    $stmt->execute([$data['id_entrega']]);
+    if (!$stmt->fetch()) {
+           json(['erro' => 'Entrega não localizada'], 404);
+    }
+
+    //Inserindo os dados 
+    $stmt = $db->prepare('
+      INSERT INTO nao_conformidades (id_entrega, id_motivo, descricao)
+      VALUES (?, ?, ?)
+      ');
+    $stmt->execute([
+      (int) $data['id_entrega'],
+      (int) $data['id_motivo'],
+      $data['descricao']
+    ]);
+
+    //Inserindo log
+        $id = $db->lastInsertId();
+
+        $stmt = $db->prepare('INSERT INTO ocorrencias (id_entrega, status, descricao, cidade, uf) VALUES (?, ?, ?, ?, ?)');
+        $stmt->execute([$id, 'CRIADA', 'Não conformidade cadastrada no sistema', '', '']);
+
+        json(self::findById($db, (int) $id), 201);
+  }
 }
