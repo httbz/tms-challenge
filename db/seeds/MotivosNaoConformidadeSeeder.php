@@ -11,7 +11,7 @@ class MotivosNaoConformidadeSeeder extends AbstractSeed
             ['codigo' => 'NAO_ENTREGUE', 'descricao' => 'Destinatário ausente', 'ativo' => 1],
             ['codigo' => 'ENDERECO_INCORRETO', 'descricao' => 'Endereço incorreto ou não localizado', 'ativo' => 1],
             ['codigo' => 'RECUSADO', 'descricao' => 'Recusado pelo destinatário', 'ativo' => 1],
-            ['codigo' => 'EXTRAVIO', 'descricao' => 'Produto extraviado', 'ativo' => 1],
+            ['codigo' => 'EXTRAVIO', 'descricao' => 'Produto extraviado', 'ativo' => 0],
             ['codigo' => 'OUTROS', 'descricao' => 'Outros motivos', 'ativo' => 1],
         ])->saveData();
     }
