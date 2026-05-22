@@ -1,0 +1,3 @@
+[submodule "php-junior"]
+	path = php-junior
+	url = https://github.com/httbz/tms-challenge.git
