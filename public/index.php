@@ -37,6 +37,6 @@ $router->get('/entregas/{id}',          [EntregaController::class, 'show']);
 $router->patch('/entregas/{id}/status', [EntregaController::class, 'updateStatus']);
 
 //Rastreamento
-$router->get('/rastreamento',           [RastreamentoController::class, 'index']);
+$router->get('/rastreamento/{codigo}',           [RastreamentoController::class, 'index']);
 
 $router->dispatch();
