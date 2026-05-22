@@ -8,7 +8,6 @@ use App\Controllers\EntregaController;
 use App\Controllers\NaoConformidadesController;
 
 header('Content-Type: application/json; charset=utf-8');
-
 function json(mixed $data, int $status = 200): never
 {
     http_response_code($status);
@@ -35,8 +34,10 @@ $router->get('/entregas',               [EntregaController::class, 'index']);
 $router->post('/entregas',              [EntregaController::class, 'store']);
 $router->get('/entregas/{id}',          [EntregaController::class, 'show']);
 $router->patch('/entregas/{id}/status', [EntregaController::class, 'updateStatus']);
-$router->post('/entregas/{id}/nao-conformidades', [EntregaController::class, 'storeNaoConf']);
 
+// Não conformidades
 $router->get('/motivos-nao-conformidade', [NaoConformidadesController::class, 'index']);
+$router->post('/entregas/{id}/nao-conformidades', [NaoConformidadeController::class, 'storeNaoConf']);
+$router->get('/entregas/{id}/nao-conformidades', [NaoConformidadeController::class, 'showNaoConf']);
 
-  $router->dispatch();
+$router->dispatch();
